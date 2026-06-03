@@ -1,36 +1,116 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
 
-First, run the development server:
+## iải thích ngắn gọn cách xử lý logic Play/Pause khi cuộn trang
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+useEffect(() => {
+    if (!parentRef.current) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) {
+            videoRef.current?.play();
+        } else {
+            videoRef.current?.pause();
+        }
+    }, {
+        threshold: 0.7
+    });
+
+    observer.observe(parentRef.current);
+
+    return () => observer.disconnect();
+}, []);
 ```
+IntersectionObserver sẽ theo dõi thẻ được truyền vào qua observer.observe();
+threshold: 0.7, tức là component hiển thị được 70% viewport
+viewport không truyền mặc định là cửa sổ trình duyệt, nếu cần theo viewport chỉ định, cần truyền vào root ( root?: Element | Document | null | undefined;)
+Vì video hiển trị toàn bộ chiều cao màn hình nên viewport được để mặc định
+entry.isIntersecting là giá trị trả về là true khi component trong viewport, false khi nằm ngoài viewport
+Và chúng unmount cần phải observer.disconnect() để đảm bảo hiệu suất
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Ví dụ về 1 component Lazy video của tôi:
+```bash
+import { useEffect, useRef, useState, memo } from 'react';
+import style from './style.module.scss';
+import { LazyVideoProps } from './type';
+import Skeleton from '@src/component/Skeleton';
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+const LazyVideo = ({ lock_auto_play_with_scroll_snap, src, className, root }: LazyVideoProps) => {
+    const parent_element = useRef<HTMLDivElement | null>(null);
+    const videoRef = useRef<HTMLVideoElement | null>(null);
+    const [loading, setLoading] = useState<boolean | undefined>(undefined);
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+    useEffect(() => {
+        if (!parent_element.current) return;
 
-## Learn More
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setLoading(true);
 
-To learn more about Next.js, take a look at the following resources:
+                    const timeout = setTimeout(() => {
+                        setLoading(false);
+                        clearTimeout(timeout);
+                    }, 0);
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+                    observer.disconnect();
+                }
+            },
+            {
+                root: root,
+            }
+        );
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+        observer.observe(parent_element.current);
 
-## Deploy on Vercel
+        return () => observer.disconnect();
+    }, [root]);
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+    useEffect(() => {
+        if (loading !== false) return;
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+        if (!videoRef.current) return;
+
+        if (lock_auto_play_with_scroll_snap) return;
+
+        // let isPlay: boolean = false;
+
+        const observer_play = new IntersectionObserver(
+            ([entry]) => {
+                // if (entry.isIntersecting) {
+                //     if (!isPlay) {
+                //         videoRef.current?.play();
+                //         isPlay = true;
+                //     }
+                // } else {
+                //     if (isPlay) {
+                //         videoRef.current?.pause();
+                //         isPlay = false;
+                //     }
+                // }
+                if (entry.isIntersecting) {
+                    // videoRef.current?.play();
+                } else {
+                    // videoRef.current?.pause();
+                }
+            },
+            {
+                root: root,
+            }
+        );
+
+        observer_play.observe(videoRef.current);
+
+        return () => observer_play.disconnect();
+    }, [root, loading, lock_auto_play_with_scroll_snap]);
+
+    return (
+        <div className={`${style.parent} ${className || ''}`} ref={parent_element}>
+            {loading === true && <Skeleton />}
+            {loading === false && <video className={style.video} ref={videoRef} src={src} controls />}
+        </div>
+    );
+};
+
+export default memo(LazyVideo);
+```

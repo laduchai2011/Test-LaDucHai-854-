@@ -9,7 +9,6 @@ export default function BottomNav({route}: {route: string }) {
     const parentRef = useRef<HTMLDivElement>(null);
     const [isShow, setIshow] = useState<boolean>(false);
 
-
     useEffect(() => {
         const parent_ref = parentRef.current;
         if (!parent_ref) return;

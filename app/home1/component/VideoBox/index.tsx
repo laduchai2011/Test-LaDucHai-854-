@@ -1,6 +1,7 @@
 "use client";
 import { memo, useRef, useEffect, useState } from "react";
 import styles from "./styles.module.css";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Heart, MessageCircleMore, Share2, Volume1, Volume2, VolumeOff } from "lucide-react";
 import { UserField } from "@/type/user";
@@ -9,6 +10,7 @@ import { fetcher } from "@/utils/fetcher";
 
 function VideoBox({data}: {data: PostField}) {
     const url = data.url;
+    const router = useRouter();
     const parentRef = useRef<HTMLDivElement>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
     const [volumeCount, setVolumeCount] = useState(0);
@@ -183,6 +185,7 @@ function VideoBox({data}: {data: PostField}) {
         return () => {
             video_ref.removeEventListener("loadedmetadata", handleLoadedMetadata);
             video_ref.removeEventListener("timeupdate", handleTimeUpdate);
+            video_ref.pause();
         };
     }, []);
     useEffect(() => {
@@ -205,6 +208,10 @@ function VideoBox({data}: {data: PostField}) {
         const t1 = Math.floor(t / 60);
         const t2 = t % 60;
         return `${t1}:${Math.trunc(t2)}`
+    }
+
+    const handleGoToProfile = () => {
+        router.push(`/profile/${data.userId}`);
     }
 
     return (
@@ -231,6 +238,7 @@ function VideoBox({data}: {data: PostField}) {
                     <Image 
                         className={styles.avatar} 
                         src={user?.avatar ? user.avatar : avatarnull} 
+                        onClick={() => handleGoToProfile()}
                         width={40}
                         height={40}
                         alt='avatar' 
@@ -249,7 +257,7 @@ function VideoBox({data}: {data: PostField}) {
                     </div>
                 </div>
                 <div className={styles.content}>
-                    <div>{user?.name}</div>
+                    <div onClick={() => handleGoToProfile()}>{user?.name}</div>
                     <div className={styles.hidden} ref={desRef}>
                         {data.des}
                     </div>

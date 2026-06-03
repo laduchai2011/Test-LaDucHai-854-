@@ -1,0 +1,44 @@
+.parent {
+    background-color: #eee;
+    /* height: 100vh; */
+    display: flex;
+}
+
+.main {
+    flex: 1;
+    height: 100vh;
+    margin-left: 300px;
+    transition: margin-left 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.main.hidden {
+    margin-left: 60px;
+}
+.main > div > .avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+}
+.main > div > .name {
+    text-align: center;
+}
+
+
+
+@media (max-width: 768px) {
+    .parent {
+        display: block;
+    }
+    .main {
+        margin-left: 0;
+        margin-bottom: 50px;
+        height: calc(100vh - 50px);
+    }
+    .main.hidden {
+        margin-left: 0;
+        margin-bottom: 50px;
+        height: calc(100vh - 50px);
+    }
+}

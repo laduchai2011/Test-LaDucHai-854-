@@ -60,7 +60,13 @@ export default function Sidebar({route, isShowHeader, setIsShownHeader}: {route:
     }
 
     const handleGoToScreen = (path: string) => {
-        router.push(path);
+        if (path === '/profile') {
+            router.push(`/profile/${0}`);
+            return;
+        } else {
+            router.push(path);
+            return;
+        }
     }
 
     const handleSelected = (_route: string) => {

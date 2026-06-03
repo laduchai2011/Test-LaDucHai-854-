@@ -13,7 +13,7 @@ export default function Home1() {
     const { isMobile } = useResponsive();
     const [isShowHeader, setIsShownHeader] = useState(true); 
     const listRef = useRef<HTMLDivElement>(null);
-    const [posts, setPosts] = useState<PostField[]>([])
+    const [posts, setPosts] = useState<PostField[]>([]);
 
     useEffect(() => {
         if (!listRef.current) return;
