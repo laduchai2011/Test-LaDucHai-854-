@@ -1,0 +1,73 @@
+.parent {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 300px;
+    background: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    overflow: hidden;
+    transition: width 0.3s ease;
+}
+.parent.hidden {
+    width: 60px;
+}
+
+.header {
+    height: 50px;
+    display: flex;  
+    align-items: center;
+    justify-content: flex-end;
+    border-bottom: 1px solid #eee;
+    box-sizing: border-box;
+    padding: 0 17px;
+}
+
+.header > svg {
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    transition: opacity 0.15s ease;
+}
+.header > svg:hover {
+    scale: 1.1;
+}
+.header > svg.opacity {
+    opacity: 1;
+}
+.header > svg.hidden {
+    display: none;
+}
+
+.row {
+    height: 50px;
+    display: flex;  
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+}
+.row:hover {
+    background: #eee;
+}
+.row.selected {
+    background: #eee;
+}
+
+.row > div {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.row > div > div:nth-child(1) {
+    flex: 1;
+    display: flex;  
+    align-items: center;
+    justify-content: center;
+}
+
+.row > div > div:nth-child(2) {
+    width: 70%;
+}
