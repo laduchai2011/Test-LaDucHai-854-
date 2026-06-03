@@ -1,6 +1,6 @@
 
 
-## iải thích ngắn gọn cách xử lý logic Play/Pause khi cuộn trang
+## Giải thích ngắn gọn cách xử lý logic Play/Pause khi cuộn trang
 
 ```bash
 useEffect(() => {
