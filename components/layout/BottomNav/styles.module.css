@@ -1,0 +1,88 @@
+.parent {
+    position: fixed;
+    z-index: 1000;
+    width: 100vw;
+    height: 50px;
+    background: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    bottom: 0;
+    left: 0;
+}
+
+.listContainer {
+    position: absolute;
+    transform: translateY(-100%);
+}
+.icons {
+    display: flex;
+    justify-content: flex-end;
+}
+.icons svg {
+    cursor: pointer;
+}
+.icons svg:hover {
+    scale: 1.1;
+}
+.list {
+    width: 100vw;
+    height: auto;
+    max-height: 0;
+    background-color: white;
+    transition: max-height 0.3s linear;
+}
+.list.show {
+    max-height: 150px;
+}
+.list > div {
+    height: 50px;
+    display: flex;
+    align-items: center;
+}
+.list > div > .box {
+    height: 50px;
+    width: calc(100% / 3);
+    display: flex;  
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+}
+.list > div > .box:hover {
+    background: #eee;
+}
+.list > div > .box.selected {
+    background: #eee;
+}
+
+.main {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.main > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: calc(100% / 3);
+    cursor: pointer;
+}
+.main > div:hover {
+    background-color: rgb(233, 233, 233);
+}
+
+.box {
+    height: 50px;
+    display: flex;  
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+}
+.box:hover {
+    background: #eee;
+}
+.box.selected {
+    background: #eee;
+}

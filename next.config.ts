@@ -12,6 +12,11 @@ const nextConfig: NextConfig = {
                 protocol: "https",
                 hostname: "www.shutterstock.com",
             },
+            {
+                protocol: "https",
+                hostname: "s120-ava-talk.zadn.vn",
+                pathname: "/**",
+            },
         ],
     },
 };

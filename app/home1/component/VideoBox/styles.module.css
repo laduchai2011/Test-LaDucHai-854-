@@ -1,7 +1,7 @@
 .parent {
     width: max-content;
-    height: 100vh;
-    background: white;
+    height: 100%;
+    background: rgb(167, 167, 167);
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     border-radius: 15px;
     /* overflow: hidden; */
@@ -63,6 +63,8 @@
     object-fit: cover;
     overflow: hidden;
     cursor: pointer;
+    box-sizing: border-box;
+    border: 1px solid white;
 }
 .heart > div {
     color: white;
@@ -158,4 +160,16 @@
     box-sizing: border-box;
     padding: 10px;
     font-size: 14px;
+}
+
+
+
+@media (max-width: 768px) {
+    .parent {
+        width: 100vw;
+    }
+
+    .videoContainer {
+        width: 100%;
+    }
 }

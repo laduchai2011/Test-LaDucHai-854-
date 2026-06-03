@@ -8,7 +8,7 @@ import { useResponsive } from "@/hooks/useResponsive";
 export default function Sidebar({route, isShowHeader, setIsShownHeader}: {route: string, isShowHeader: boolean, setIsShownHeader: React.Dispatch<React.SetStateAction<boolean>>}) {
     const router = useRouter();
     const { isMobile } = useResponsive();
-    const [isShowText, setIsShowText] = useState(true);
+    const [isShowText, setIsShowText] = useState(isMobile ? false : true);
     const parentRef = useRef<HTMLDivElement>(null);
     const openRef = useRef<SVGSVGElement>(null);
     const closeRef = useRef<SVGSVGElement>(null);
@@ -76,7 +76,7 @@ export default function Sidebar({route, isShowHeader, setIsShownHeader}: {route:
                 <X className={`${styles.opacity}`} onClick={() =>handleClose()} ref={closeRef} size={24}/>
                 <Menu className={`${styles.hidden}`} onClick={() =>handleOpen()} ref={openRef} size={24}/>
             </div>
-           <div className={`${styles.row} ${handleSelected('/')}`}>
+            <div className={`${styles.row} ${handleSelected('/')}`}>
                 <div onClick={() => handleGoToScreen('/')}> 
                     <div> 
                         <House size={20}/>

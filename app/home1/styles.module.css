@@ -12,16 +12,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    /* position: fixed;
-    inset: 0;
-    width: 100vw;
-    height: 100vh; */
 }
 .list.hidden {
     margin-left: 60px;
 }
 .list > div {
-    height: 100vh;
+    height: 100%;
     width: 100%;
     overflow-y: auto;
     scroll-snap-type: y mandatory;
@@ -31,10 +27,28 @@
     height: 0px;
 }
 .list > div > div {
-    height: 100vh;
+    height: 100%;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     scroll-snap-align: start; 
+}
+
+
+
+@media (max-width: 768px) {
+    .parent {
+        display: block;
+    }
+    .list {
+        margin-left: 0;
+        margin-bottom: 50px;
+        height: calc(100vh - 50px);
+    }
+    .list.hidden {
+        margin-left: 0;
+        margin-bottom: 50px;
+        height: calc(100vh - 50px);
+    }
 }

@@ -3,23 +3,36 @@ import { memo, useRef, useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import Image from "next/image";
 import { Heart, MessageCircleMore, Share2, Volume1, Volume2, VolumeOff } from "lucide-react";
+import { UserField } from "@/type/user";
+import { PostField } from "@/type/post";
+import { fetcher } from "@/utils/fetcher";
 
-
-function VideoBox({index, src}: {index: number, src: string}) {
-    const url = src;
+function VideoBox({data}: {data: PostField}) {
+    const url = data.url;
     const parentRef = useRef<HTMLDivElement>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
     const [volumeCount, setVolumeCount] = useState(0);
     const processContainerRef = useRef<HTMLDivElement>(null);
     const processRef = useRef<HTMLDivElement>(null);
-    const [heartCount, setHeartCount] = useState(0);
+    const [heartCount, setHeartCount] = useState(data.likeCount);
     const [isHearted, setIsHearted] = useState(false);
-    const [messageCount, setMessageCount] = useState(0);
-    const [shareCount, setShareCount] = useState(0);
+    const [commentCount, setCommentCount] = useState(data.commentCount);
+    const [shareCount, setShareCount] = useState(data.shareCount);
     const desRef = useRef<HTMLDivElement>(null);
-    const [textSeeMore, setTextSeeMore] = useState<string | null>(null)
+    const [textSeeMore, setTextSeeMore] = useState<string | null>(null);
+    const [user, setUser] = useState<UserField | null>(null)
 
     const avatarnull = 'https://www.shutterstock.com/image-vector/default-avatar-social-media-display-600nw-2632690107.jpg';
+
+    useEffect(() => {
+        fetcher<UserField>(`/api/user?id=${data.userId}`)
+        .then((res) => {
+            setUser(res)
+        })
+        .catch(err => {
+            console.error(err)
+        })
+    }, [data.userId])
 
     useEffect(() => {
         if (!parentRef.current) return;
@@ -37,7 +50,7 @@ function VideoBox({index, src}: {index: number, src: string}) {
         observer.observe(parentRef.current);
 
         return () => observer.disconnect();
-    }, [index]);
+    }, []);
 
     const handleMaxVolume = () => {
         setVolumeCount(100)
@@ -217,7 +230,7 @@ function VideoBox({index, src}: {index: number, src: string}) {
                 <div className={styles.interact2}>
                     <Image 
                         className={styles.avatar} 
-                        src={avatarnull} 
+                        src={user?.avatar ? user.avatar : avatarnull} 
                         width={40}
                         height={40}
                         alt='avatar' 
@@ -228,7 +241,7 @@ function VideoBox({index, src}: {index: number, src: string}) {
                     </div>
                     <div className={styles.message}>
                         <MessageCircleMore size={30} color="white" />
-                        <div>{messageCount}</div>
+                        <div>{commentCount}</div>
                     </div>
                     <div className={styles.share}>
                         <Share2 size={30} color="white" />
@@ -236,10 +249,9 @@ function VideoBox({index, src}: {index: number, src: string}) {
                     </div>
                 </div>
                 <div className={styles.content}>
-                    <div>tac gia</div>
+                    <div>{user?.name}</div>
                     <div className={styles.hidden} ref={desRef}>
-                        noi dung noi dung noi dung noi dung noi dung noi dung noi dungnoi dung noi dung noi dung noi dung noi dung noi dung noi dung noi dung noi dung noi dung noi dung noi dung noi dung noi dung noi dung noi dung noi dung
-                        noi dung noi dung noi dung noi dung noi dung noi dung noi dungnoi dung noi dung noi dung noi dung noi dung noi dung noi dung noi dung noi dung noi dung noi dung noi dung noi dung noi dung noi dung noi dung noi dung
+                        {data.des}
                     </div>
                     {textSeeMore && <div onClick={() => handleSeeMore()}>{textSeeMore}</div>}
                 </div>
